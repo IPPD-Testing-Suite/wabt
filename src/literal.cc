@@ -331,9 +331,6 @@ Result FloatParser<T>::ParseHex(const char* s,
       uint32_t digit = (*s - '0');
       assert(digit <= 9);
       exponent = exponent * 10 + digit;
-      if (exponent + significand_exponent_add >= Traits::kMaxExp) {
-        break;
-      }
     }
   }
 
@@ -794,7 +791,7 @@ void WriteDoubleHex(char* buffer, size_t size, uint64_t bits) {
 void WriteUint128(char* buffer, size_t size, v128 bits) {
   uint64_t digits;
   uint64_t remainder;
-  char reversed_buffer[40];
+  char reversed_buffer[10];
   size_t len = 0;
   do {
     remainder = bits.u32(3);

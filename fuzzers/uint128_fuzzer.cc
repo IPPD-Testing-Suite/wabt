@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "wabt/binary-reader-ir.h"
-#include "wabt/binary-reader.h"
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+
 #include "wabt/common.h"
-#include "wabt/ir.h"
+#include "wabt/literal.h"
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  wabt::ReadBinaryOptions options;
-  wabt::Errors errors;
-  wabt::Module module;
-  wabt::ReadBinaryIr("dummy filename", data, size, options, &errors, &module);
+  if (size < 16) return 0;
+  wabt::v128 val;
+  memcpy(&val, data, 16);
+  char buf[128];
+  wabt::WriteUint128(buf, sizeof(buf), val);
   return 0;
 }

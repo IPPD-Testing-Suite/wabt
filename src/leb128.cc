@@ -194,7 +194,7 @@ size_t ReadU32Leb128(const uint8_t* p,
   } else if (p + 3 < end && (p[3] & 0x80) == 0) {
     *out_value = LEB128_4(uint32_t);
     return 4;
-  } else if (p + 4 < end && (p[4] & 0x80) == 0) {
+  } else if (p + 4 <= end && (p[4] & 0x80) == 0) {
     // The top bits set represent values > 32 bits.
     if (p[4] & 0xf0) {
       return 0;

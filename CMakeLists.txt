@@ -652,6 +652,43 @@ if (BUILD_TOOLS)
   endif ()
 endif ()
 
+if(BUILD_FUZZ_TOOLS)
+  # leb128_fuzzer
+  wabt_executable(
+    NAME leb128_fuzzer
+    SOURCES fuzzers/leb128_fuzzer.cc
+    FUZZ
+  )
+
+  # literal_fuzzer
+  wabt_executable(
+    NAME literal_fuzzer
+    SOURCES fuzzers/literal_fuzzer.cc
+    FUZZ
+  )
+
+  # uint128_fuzzer
+  wabt_executable(
+    NAME uint128_fuzzer
+    SOURCES fuzzers/uint128_fuzzer.cc
+    FUZZ
+  )
+
+  # utf8_fuzzer
+  wabt_executable(
+    NAME utf8_fuzzer
+    SOURCES fuzzers/utf8_fuzzer.cc
+    FUZZ
+  )
+
+  # binary_reader_str_fuzzer
+  wabt_executable(
+    NAME binary_reader_str_fuzzer
+    SOURCES fuzzers/binary_reader_str_fuzzer.cc
+    FUZZ
+  )
+endif()
+
 if (BUILD_TESTS)
   if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(WASM2C_CFLAGS "${WASM2C_CFLAGS} -g -O0")

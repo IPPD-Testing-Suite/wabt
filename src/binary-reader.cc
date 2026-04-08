@@ -417,7 +417,7 @@ Result BinaryReader::ReadStr(std::string_view* out_str, const char* desc) {
   uint32_t str_len = 0;
   CHECK_RESULT(ReadU32Leb128(&str_len, "string length"));
 
-  ERROR_UNLESS(str_len <= read_end_ - state_.offset,
+  ERROR_UNLESS(str_len <= read_end_ - state_.offset + 1,
                "unable to read string: %s", desc);
 
   *out_str = std::string_view(

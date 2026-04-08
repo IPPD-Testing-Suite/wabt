@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "wabt/ir.h"
-#include "wabt/wast-lexer.h"
-#include "wabt/wast-parser.h"
+#include <cstddef>
+#include <cstdint>
+
+#include "wabt/literal.h"
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  wabt::Errors Lexerrors;
-  std::unique_ptr<wabt::WastLexer> lexer =
-      wabt::WastLexer::CreateBufferLexer("fake_file", data, size, &Lexerrors);
+  if (size == 0) return 0;
+  const char* s = reinterpret_cast<const char*>(data);
+  const char* end = s + size;
 
-  if (!lexer) {
-    return 0;
-  }
+  uint32_t bits32 = 0;
+  uint64_t bits64 = 0;
 
-  std::unique_ptr<wabt::Module> module;
-  wabt::Errors errors;
-  wabt::Features features;
-  wabt::WastParseOptions parse_wast_options(features);
-  ParseWatModule(lexer.get(), &module, &errors, &parse_wast_options);
+  wabt::ParseFloat(wabt::LiteralType::Hexfloat, s, end, &bits32);
+  wabt::ParseDouble(wabt::LiteralType::Hexfloat, s, end, &bits64);
+  wabt::ParseFloat(wabt::LiteralType::Float, s, end, &bits32);
+  wabt::ParseDouble(wabt::LiteralType::Float, s, end, &bits64);
+  wabt::ParseFloat(wabt::LiteralType::Nan, s, end, &bits32);
+  wabt::ParseDouble(wabt::LiteralType::Nan, s, end, &bits64);
 
   return 0;
 }

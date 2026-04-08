@@ -57,7 +57,7 @@ bool IsValidUtf8(const char* s, size_t s_length) {
   while (p < end) {
     uint8_t cu0 = *p;
     int length = s_utf8_length[cu0];
-    if (p + length > end) {
+    if (p + length - 1 > end) {
       return false;
     }
 
